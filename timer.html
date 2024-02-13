@@ -1,61 +1,77 @@
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background: url('your-background-photo.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    #timer {
+      font-size: 2em;
+      color: #2c66a8;
+      border: 2px solid #2980b9;
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    #changeStyleButton {
+      font-size: 1em;
+      background-color: #3498db;
+      color: #8d5151;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
 </head>
-<style>
-    
-</style>
 <body>
-    <h1 id="timer">00:00:00</h1>
-    <button onclick="startTimer()">Start</button>
-    <button onclick="stopTimer()">Stop</button>
-    <button onclick="resetTimer()">Reset</button>
 
-    <script>
-        let timer;
-        let seconds = 0;
-        let minutes = 0;
-        let hours = 0;
+<div id="timer">00:00:00</div>
+<button id="changeStyleButton" onclick="changeTimerStyle()">Change Style</button>
 
-        function updateTimer() {
-            seconds++;
-            if (seconds == 60) {
-                seconds = 0;
-                minutes++;
-                if (minutes == 60) {
-                    minutes = 0;
-                    hours++;
-                }
-            }
+<script>
+  function startTimer() {
+    var seconds = 0;
+    setInterval(function () {
+      seconds++;
+      var hours = Math.floor(seconds / 3600);
+      var minutes = Math.floor((seconds % 3600) / 60);
+      var remainingSeconds = seconds % 60;
 
-            const formattedTime = 
-                padNumber(hours) + ":" + padNumber(minutes) + ":" + padNumber(seconds);
-            
-            document.getElementById("timer").innerText = formattedTime;
-        }
+      document.getElementById('timer').innerText =
+        (hours < 10 ? '0' : '') + hours + ':' +
+        (minutes < 10 ? '0' : '') + minutes + ':' +
+        (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+    }, 1000);
+  }
 
-        function startTimer() {
-            timer = setInterval(updateTimer, 1000);
-        }
+  function styleTimer(textColor, bgColor, borderColor) {
+    var timer = document.getElementById('timer');
+    timer.style.color = textColor;
+    timer.style.backgroundColor = bgColor;
+    timer.style.borderColor = borderColor;
+  }
 
-        function stopTimer() {
-            clearInterval(timer);
-        }
+  function changeTimerStyle() {
+    styleTimer('#fff', '#e74c3c', '#c0392b'); // Change style to red background
+  }
 
-        function resetTimer() {
-            clearInterval(timer);
-            seconds = 0;
-            minutes = 0;
-            hours = 0;
-            document.getElementById("timer").innerText = "00:00:00";
-        }
+  // Start the timer when the page loads
+  window.onload = function () {
+    startTimer();
+  };
+</script>
 
-        function padNumber(number) {
-            return number < 10 ? "0" + number : number;
-        }
-    </script>
 </body>
 </html>
