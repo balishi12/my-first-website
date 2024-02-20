@@ -1,30 +1,60 @@
+const quizData = [
+  {
+    question: "What is the capital of France?",
+    options: ["Paris", "London", "Rome", "Berlin"],
+    answer: "Paris"
+  },
+  {
+    question: "What is 2 + 2?",
+    options: ["3", "4", "5", "6"],
+    answer: "4"
+  }
+];
 
-document.querySelectorAll('nav a').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        document.querySelector(targetId).scrollIntoView({
-            behavior: 'smooth'
-        });
+const questionElement = document.getElementById("question");
+const optionsElement = document.getElementById("options");
+const submitButton = document.getElementById("submitBtn");
+const resultElement = document.getElementById("result");
+const refreshButton = document.getElementById("refreshBtn");
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function showQuestion() {
+  const currentQuestion = quizData[currentQuestionIndex];
+  questionElement.textContent = currentQuestion.question;
+  optionsElement.innerHTML = "";
+
+  currentQuestion.options.forEach(option => {
+    const optionElement = document.createElement("button");
+    optionElement.textContent = option;
+    optionElement.classList.add("option-btn");
+    optionsElement.appendChild(optionElement);
+
+    optionElement.addEventListener("click", () => {
+      if (option === currentQuestion.answer) {
+        score++;
+      }
     });
+  });
+}
+
+function showResult() {
+  resultElement.textContent = `Your score: ${score}/${quizData.length}`;
+}
+
+submitButton.addEventListener("click", () => {
+  if (currentQuestionIndex < quizData.length - 1) {
+    currentQuestionIndex++;
+    showQuestion();
+  } else {
+    showResult();
+    submitButton.disabled = true;
+  }
 });
+refreshButton.addEventListener("click", () => {
+    window.location.reload();
+  });
 
-
-document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    
-    const formData = new FormData(this);
-    const formObject = {};
-    formData.forEach((value, key) => {
-        formObject[key] = value;
-    });
-    console.log('Form data:', formObject);
-    
-   
-    alert('Your message has been sent!');
-
-    this.reset();
-});
+showQuestion();
 
